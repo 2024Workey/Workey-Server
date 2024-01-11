@@ -1,30 +1,27 @@
-const dotenv = require('dotenv')
+// db랑 시퀄라이즈랑 연결하는 역할 
+const Sequelize = require('sequelize');
+require('dotenv').config();
 
-dotenv.config()
+console.log(process.env.MYSQL_DATABASE);
+console.log(process.env.MYSQL_USERNAME);
+console.log(process.env.MYSQL_PASSWORD);
+console.log(process.env.MYSQL_HOST);
+console.log(process.env.MYSQL_PORT);
 
-module.exports = {
-  development: {
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: 'database_development',
-    host: '127.0.0.1',
+const sequelize = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USERNAME, process.env.MYSQL_PASSWORD, {
+    host: process.env.MYSQL_HOST,
+    port: process.env.MYSQL_PORT,
     dialect: 'mysql',
-    operatorsAliases: false,
-  },
-  test: {
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: 'database_test',
-    host: '127.0.0.1',
-    dialect: 'mysql',
-    operatorsAliases: false,
-  },
-  production: {
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: 'database_production',
-    host: '127.0.0.1',
-    dialect: 'mysql',
-    operatorsAliases: false,
-  },
-}
+})
+
+// 연결 테스트
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log('Connected to the config');
+    })
+    .catch((err) => {
+        console.error('Unable to connect to the config:', err);
+    });
+
+module.exports = sequelize;
