@@ -14,9 +14,8 @@ const port = 3000
 const pool = mysql.createPool({// connection을 여러 개 만들어 쓸 수 있다.(기본10개)
     host: 'localhost',
     user: 'root',
-    port: '3306',
-    password: 'gkdms~!1357',
-    database: 'rolling_db'
+    password: '0000',
+    database: 'workey_db'
 })
 
 const sec = 1000
