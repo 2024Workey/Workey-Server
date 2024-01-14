@@ -6,10 +6,12 @@ const User = require('./user')(sequelize);// sequelize가 db 정보를 가지고
 const Question = require('./question')(sequelize);// sequelize가 db 정보를 가지고 있으므로 전달해주면 얘가 만들어봄 
 const Company = require('./company')(sequelize);// sequelize가 db 정보를 가지고 있으므로 전달해주면 얘가 만들어봄 
 const Diary = require('./diary')(sequelize);// sequelize가 db 정보를 가지고 있으므로 전달해주면 얘가 만들어봄 
+const SelfTestResults = require('./self-test-result')(sequelize);// sequelize가 db 정보를 가지고 있으므로 전달해주면 얘가 만들어봄 
 
 module.exports = {
   User,
   Question,
   Company,
   Diary,
+  SelfTestResults,
 }
