@@ -2,11 +2,11 @@ const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 const sequelize = require("./config/config");
+const bodyParse = require('body-parser')
 
 const app = express();
 const port = 3000;
 
-const bodyParse = require('body-parser')
 app.use(bodyParse.json())
 app.use(bodyParse.urlencoded({ extended: true}))
 
@@ -20,9 +20,17 @@ sequelize.sync()
 
 // routes
 const userRouter = require('./routes/user')
+const questionRouter = require('./routes/question')
+const companyRouter = require('./routes/company')
+const diaryRouter = require('./routes/diary')
+const selfTestResultRouter = require('./routes/self-test-result')
 
 // router
 app.use('/users', userRouter)// 진입할 엔드포인트 + 진입할 라우터
+app.use('/questions', questionRouter)// 진입할 엔드포인트 + 진입할 라우터
+app.use('/companies', companyRouter)// 진입할 엔드포인트 + 진입할 라우터
+app.use('/diaries', diaryRouter)// 진입할 엔드포인트 + 진입할 라우터
+app.use('/self-test-results', selfTestResultRouter)// 진입할 엔드포인트 + 진입할 라우터
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
