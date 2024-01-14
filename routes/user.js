@@ -18,6 +18,7 @@ router.post('/join', async (req, res) => {
     }
 });
 
+// 모든 유저 불러오기 
 router.get('/', async ( req, res ) => {
     try {
         const user = await User.findAll();
