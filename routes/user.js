@@ -6,13 +6,26 @@ const LocalStrategy = require('passport-local').Strategy;
 
 const router = express.Router();
 
-const salt = 12;// 값이 높을수록 암호화 연산 증가 
+const salt = 8;// 값이 높을수록 암호화 연산 증가 
 
 // endpoint
 // 시퀄라이즈가 제공하는 건 모두 비동기함수
 router.post('/join', async (req, res) => {
     try {
-        const user = await User.create(req.body);
+        console.log(req.body.email);
+        console.log(req.body.password);
+        const user = await User.create({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            password: bcrypt.hashSync(req.body.password, salt),
+            startTime: req.body.startTime,
+            endTime: req.body.endTime,
+            company: req.body.company,
+            payday: req.body.payday,
+            createdAt: req.body.createdAt,
+            updatedAt: req.body.updatedAt,
+          });
         return res.status(201).json({ "message": req.body.email + " join success" });
     } catch (error) {
         console.error(error);
