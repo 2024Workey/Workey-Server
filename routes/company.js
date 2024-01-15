@@ -35,6 +35,8 @@ router.get('/:company_id', async (req, res) => {
         company : req.params.company_id
       }
     });
+    // console.log(user);
+
     // company의 사람들 좋은 표정 개수 구하기
     for(let x of user) {
       total += x.dataValues.goodStateCount;

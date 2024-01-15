@@ -24,18 +24,20 @@ sequelize.sync()
   });
 
 // routes
+const mainRouter = require('./routes/main')
 const userRouter = require('./routes/user')
 const questionRouter = require('./routes/question')
 const companyRouter = require('./routes/company')
 const diaryRouter = require('./routes/diary')
 const selfTestResultRouter = require('./routes/self-test-result')
 
-// router
-app.use('/users', userRouter)// 진입할 엔드포인트 + 진입할 라우터
-app.use('/questions', questionRouter)// 진입할 엔드포인트 + 진입할 라우터
-app.use('/companies', companyRouter)// 진입할 엔드포인트 + 진입할 라우터
-app.use('/diaries', diaryRouter)// 진입할 엔드포인트 + 진입할 라우터
-app.use('/self-test-results', selfTestResultRouter)// 진입할 엔드포인트 + 진입할 라우터
+// router - 진입할 엔드포인트 + 진입할 라우터
+app.use('/main', mainRouter)
+app.use('/users', userRouter)
+app.use('/questions', questionRouter)
+app.use('/companies', companyRouter)
+app.use('/diaries', diaryRouter)
+app.use('/self-test-results', selfTestResultRouter)
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
