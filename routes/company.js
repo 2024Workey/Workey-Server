@@ -17,11 +17,12 @@ router.post('/', async (req,res) => {
 })
 
 // 회사 list (ranking)
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
-
+    const companies = await Company.findAll();
+    return res.status(200).json(companies);
   } catch(err) {
-
+    return res.status(501).json({ "message": "회사 불러오기에 실패하였습니다." });
   }
 })
 
