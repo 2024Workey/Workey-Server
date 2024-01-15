@@ -41,15 +41,16 @@ app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(session({  // 메모리 세션을 활성화하는 코드
-  resave:false, // 세션 객체에 수정사항이 없어도 저장할까를 정하는 코드
-  saveUninitialized:true, // 처음의 빈 세션 객체라도 저장을 할지말지 정하는 코드
-  secret:'secret-key',
-  cookie:{
-      httpOnly:true,
-      secure:false, // https를 쓸것인가?
+
+// session 기초 세팅 
+app.use(session({
+  secret: 'secret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+      // maxAge: 10 * sec
       maxAge: HOUR
-  },
+  }
 }));
 
 app.listen(port, () => {
