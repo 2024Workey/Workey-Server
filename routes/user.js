@@ -12,20 +12,17 @@ const salt = 8;// 값이 높을수록 암호화 연산 증가
 // 시퀄라이즈가 제공하는 건 모두 비동기함수
 router.post('/join', async (req, res) => {
     try {
-        console.log(req.body.email);
-        console.log(req.body.password);
+        const { password } = req.body;
+
+        const hashedPassword = await bcrypt.hash(password, salt)
+
         const user = await User.create({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            password: bcrypt.hashSync(req.body.password, salt),
-            startTime: req.body.startTime,
-            endTime: req.body.endTime,
-            company: req.body.company,
-            payday: req.body.payday,
-            createdAt: req.body.createdAt,
-            updatedAt: req.body.updatedAt,
-          });
+            ...req.body,
+            password: hashedPassword,
+        });
+
+        req.session.user = user;
+
         return res.status(201).json({ "message": req.body.email + " join success" });
     } catch (error) {
         console.error(error);
@@ -34,42 +31,30 @@ router.post('/join', async (req, res) => {
 });
 
 // 로그인
-router.get('/login', async (req, res, passport) => {
+router.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    bcrypt.hash(PW, salt, (err, encryptedPW) => {
+    try {
+        const user = await User.findOne({ where: { email: email } });
+        console.log('user', user)
+        console.log('body', req.body)
+        // user가 있으면
+        if (user) {
+            // 비밀번호 비교
+            const passwordMatch = await bcrypt.compare(password, user.password);
 
-    })
+            if (passwordMatch) {
+                req.session.user = user; // 로그인 성공 시 세션에 사용자 정보 저장
 
-    // hashSync 동기
-    const hash = bcrypt.hashSync(PW, salt);
-
-    // async/await 사용
-    // const hash = await bcrypt.hash(PW, salt)
-
-    passport.use(new LocalStrategy({
-        usernameField: 'email',
-        passwordField: 'password',
-    }, async (email, password, done) => {
-        try {
-            const exUser = await User.findOne({ where: { email } });
-            if (exUser) {
-                const result = await bcrypt.compare(password, exUser.password);
-                if (result) {
-                    done(null, exUser);
-                } else {
-                    done(null, false, { message: '비밀번호가 일치하지 않습니다.' });
-                }
-            } else {
-                done(null, false, { message: '가입되지 않은 회원입니다.' });
+                console.log(req.session.user);
+                return res.status(200).json(user);
             }
-        } catch (err) {
-            console.error(err);
-            done(err);
         }
-    }));
-    if (user) {
-        return res.status(200).json({ "message": "login success" });
-    }
+        // user가 존재하지 않으면
+        return res.status(401).json({ error: 'Invalid credentials' });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Error logging in' });
+    }    
 });
 
 // 모든 유저 불러오기 

@@ -8,6 +8,10 @@ const session = require('express-session');
 const app = express();
 const port = 3000;
 
+// 세션
+const SEC = 1000;
+const HOUR = 60 * 60 * SEC;
+
 app.use(bodyParse.json())
 app.use(bodyParse.urlencoded({ extended: true}))
 
@@ -39,11 +43,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(session({  // 메모리 세션을 활성화하는 코드
   resave:false, // 세션 객체에 수정사항이 없어도 저장할까를 정하는 코드
-  saveUninitialized:false, // 처음의 빈 세션 객체라도 저장을 할지말지 정하는 코드
-  secret:process.env.COOKIE_SECRET,
+  saveUninitialized:true, // 처음의 빈 세션 객체라도 저장을 할지말지 정하는 코드
+  secret:'secret-key',
   cookie:{
       httpOnly:true,
       secure:false, // https를 쓸것인가?
+      maxAge: HOUR
   },
 }));
 
