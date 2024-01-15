@@ -7,14 +7,20 @@ const User = (sequelize) => sequelize.define('users', {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
+    unique: true,
   },
   firstName: {
+    type: DataTypes.STRING(20),
+    allowNull: false, 
+  },
+  lastName: {
     type: DataTypes.STRING(20),
     allowNull: false, 
   },
   email: {
     type: DataTypes.STRING(100),
     allowNull: false,
+    unique: true,
   },
   password: {
     type: DataTypes.STRING(50),
@@ -44,7 +50,5 @@ const User = (sequelize) => sequelize.define('users', {
   },
 }
 );
-
-// You can define associations, hooks, and other configurations here
 
 module.exports = User;
