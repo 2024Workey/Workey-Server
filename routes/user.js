@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/join', async (req, res) => {
     try {
         const user = await User.create(req.body);
-        res.status(201).json({"message" : req.body.email+" join success"});
+        return res.status(201).json({"message" : req.body.email+" join success"});
     } catch (error) {
         console.error(error);
         return res.status(500).json({ success: false, message: "Error creating user" });
@@ -20,25 +20,18 @@ router.post('/join', async (req, res) => {
 router.get('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        const exEmail = await User.findOne({ // 이메일 검사
+        const user = await User.findOne({ // 이메일 검사
             where: { // where : DB에서 조건을 건다.
                 email: email,
-            }
-        });
-        const exPassword = await User.findOne({ // 이메일 검사
-            where: {
                 password: password,
             }
         });
-        
-        // 
-        if (exEmail && exPassword) {
+        if (user) {
             return res.status(200).json({"message": "login success"});
         }
-        console.log('User: ' + user);
         
     } catch (error) {
-        res.status(500).json({ "error": error })
+        return res.status(500).json({ "error": "login fail"})
     }
 });
 
