@@ -87,17 +87,52 @@ router.get('/mypage/:user_id', async (req, res) => {
     try {
         const mypage = await User.findOne({
             attributes: ['id', 'lastName', 'firstName', 'startTime', 'endTime', 'company'],
-            where: {id: id},
+            where: { id: id },
         });
+        console.log("가져온 마이페이지 "+mypage);
         // mypage 정보를 가져왔다면 
-        if ( mypage ) 
+        if (mypage)
             return res.status(200).json({
                 "success": mypage,
                 "userId": id
             });
-        else 
+        else
             return res.status(404).json({
                 "error": "유저 정보를 찾을 수 없음",
+                "userId": id
+            });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ "error": error })
+    }
+})
+
+// 마이페이지 수정
+router.patch("/mypage/:user_id", async (req, res) => {
+    const id = req.params.user_id;
+    console.log("시작시간 : "+req.body);
+    const { startTime, endTime, company } = req.body;
+    try {
+        // 마이페이지 수정 
+        const mypage = await User.update({
+            startTime: startTime,
+            endTime: endTime,
+            company: company,
+        }, {
+            where: {id: id},
+        });
+        // 수정된 정보 가져오기
+        const updatedUser = await User.findOne({
+            where: { id: id },
+        })
+        if (mypage)
+            return res.status(200).json({
+                "success": updatedUser,
+                "userId": id
+            });
+        else
+            return res.status(404).json({
+                "error": "마이페이지 수정에 실패함\n"+error,
                 "userId": id
             });
     } catch (error) {
