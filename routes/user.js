@@ -91,9 +91,15 @@ router.get('/mypage/:user_id', async (req, res) => {
         });
         // mypage 정보를 가져왔다면 
         if ( mypage ) 
-            return res.status(200).json({"success": mypage});
+            return res.status(200).json({
+                "success": mypage,
+                "userId": id
+            });
         else 
-            return res.status(404).json({"error": "유저 정보를 찾을 수 없음"})
+            return res.status(404).json({
+                "error": "유저 정보를 찾을 수 없음",
+                "userId": id
+            });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ "error": error })
