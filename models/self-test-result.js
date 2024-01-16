@@ -1,5 +1,4 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/config');
 
 const SelfTestResults = (sequelize) => sequelize.define("self_test_results", {
     id: {
@@ -16,19 +15,19 @@ const SelfTestResults = (sequelize) => sequelize.define("self_test_results", {
             key: 'id',
         }
     },
-    answer1: {
+    st_answer1: {
         type: DataTypes.TINYINT,
         allowNull: false,
     },
-    answer2: {
+    st_answer2: {
         type: DataTypes.TINYINT,
         allowNull: false,
     },
-    answer3: {
+    st_answer3: {
         type: DataTypes.TINYINT,
         allowNull: false,
     },
-    answer4: {
+    st_answer4: {
         type: DataTypes.TINYINT,
         allowNull: false,
     },
