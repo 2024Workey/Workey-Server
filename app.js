@@ -3,7 +3,10 @@ const path = require('path');
 const morgan = require('morgan');
 const sequelize = require("./config/config");
 const bodyParse = require('body-parser')
+const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const passport = require('passport');
 
 const app = express();
 const port = 3000;
@@ -54,6 +57,9 @@ app.use(session({
       maxAge: HOUR
   }
 }));
+
+app.use(passport.initialize()); //초기화
+app.use(passport.session()); //세션에서 로그인정보 복구
 
 app.listen(port, () => {
   console.log(port, '번 포트에서 대기 중');
