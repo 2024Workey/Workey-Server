@@ -55,5 +55,40 @@ router.get('/list/:user_id', async (req, res) => {
   }
 })
 
+// 글 수정하기
+router.patch('/:diary_id', async (req, res) => {
+  const { answer } = req.body
+  const id = req.params.diary_id
+
+  try {
+    const diary = await Diary.update({
+      answer : answer
+    }, {
+      where : { id : id }
+    }
+    )
+
+    const editedDiary = await Diary.findOne({
+      where : { id : id }
+    }
+    )
+
+    console.log("***", editedDiary)
+
+    // diary가 업데이트가 안됐을 경우
+    if(diary) {
+      res.status(201).json({ "answer" : editedDiary.dataValues.answer })
+    } else {
+      return res.status(404).json( { "message": "글 수정하기에 실패하였습니다." } )
+    }
+  }
+  
+  // 서버에 문제 생겼을때
+  catch(err) {
+    console.error(err)
+    return res.status(500).json( { "message": "글 수정하기에 실패하였습니다." } );
+  }
+})
+
 
 module.exports = router;
