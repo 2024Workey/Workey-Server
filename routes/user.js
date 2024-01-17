@@ -89,7 +89,6 @@ router.get('/mypage/:user_id', async (req, res) => {
             attributes: ['id', 'lastName', 'firstName', 'startTime', 'endTime', 'company'],
             where: { id: id },
         });
-        console.log("가져온 마이페이지 " + mypage);
         // mypage 정보를 가져왔다면 
         if (mypage)
             return res.status(200).json({
@@ -110,7 +109,6 @@ router.get('/mypage/:user_id', async (req, res) => {
 // 마이페이지 수정
 router.patch("/mypage/:user_id", async (req, res) => {
     const id = req.params.user_id;
-    console.log("시작시간 : " + req.body);
     const { startTime, endTime, company } = req.body;
     try {
         // 마이페이지 수정 
@@ -131,11 +129,6 @@ router.patch("/mypage/:user_id", async (req, res) => {
                 "userId": id
             });
         }
-        // console.log("mypage: " + mypage);
-        // return res.status(404).json({
-        //     "error": "마이페이지 수정에 실패함\n" + error,
-        //     "userId": id
-        // });
 
     } catch (error) {
         console.log(error);
