@@ -4,6 +4,7 @@ const { Op } = require("sequelize");
 const bcrypt = require('bcrypt');
 const path = require('path');
 const session = require('express-session');
+const { now } = require('moment');
 
 const router = express.Router();
 
@@ -116,6 +117,7 @@ router.patch("/mypage/:user_id", async (req, res) => {
             startTime: startTime,
             endTime: endTime,
             company: company,
+            updatedAt: now,
         }, {
             where: { id: id },
         });
@@ -148,15 +150,15 @@ router.post('/recreating-pw', async (req, res) => {
             }
         })
 
-        if(user) {
+        if (user) {
             return res.status(200).json({
                 "message": "존재하는 유저 정보입니다.",
-                "user_id" : user.id
+                "user_id": user.id
             })
         } else {
             return res.status(404).json({ "message": "존재하지 않는 유저 정보입니다." })
         }
-    } catch(err) {
+    } catch (err) {
         console.error(err)
         return res.status(500).json({ "message": "존재하지 않는 유저 정보입니다." })
     }
@@ -166,19 +168,23 @@ router.post('/recreating-pw', async (req, res) => {
 router.patch('/recreating-pw/:user_id', async (req, res) => {
     const { password } = req.body
     const id = req.params.user_id
+
+    const hashedPassword = await bcrypt.hash(password, salt)
+
     try {
         const user = await User.update({
-            password : password
+            password: hashedPassword,
+            updatedAt: now,
         }, {
-            where: { id : id }
+            where: { id: id }
         })
 
-        if(user) {
-            return res.status(201).json( { "message": "새 비밀번호 생성에 성공하였습니다." })
+        if (user) {
+            return res.status(201).json({ "message": "새 비밀번호 생성에 성공하였습니다." })
         } else {
-            return res.status(400).json( { "message": "새 비밀번호 생성에 실패하였습니다." })
+            return res.status(400).json({ "message": "새 비밀번호 생성에 실패하였습니다." })
         }
-    } catch(err) {
+    } catch (err) {
         console.error(err)
         return res.status(500).json({ "message": "새 비밀번호 생성에 실패하였습니다." })
     }
