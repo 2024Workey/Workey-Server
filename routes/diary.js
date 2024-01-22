@@ -11,11 +11,15 @@ router.post('/:user_id/:ques_id', async (req, res) => {
       quesId : req.params.ques_id,
       ...req.body
     });
-    //console.log(diary);
-    return res.status(201).json( {"message" : "셀프 체크 테스트 결과 저장에 성공했습니다."} )
+    // diary가 있다면 - 예외처리
+    if(diary) {
+      return res.status(201).json( {"message" : "글 저장에 성공했습니다."} )
+    } else {
+      return res.status(404).json( {"message" : "글 저장에 실패하였습니다."} )
+    }
   } catch(err) {
     console.error(err)
-    return res.status(500).json( { "message": "글 작성에 실패하였습니다." } );
+    return res.status(500).json( { "message": "글 저장에 실패하였습니다." } );
   }
 })
 
