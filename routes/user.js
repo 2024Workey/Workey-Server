@@ -136,4 +136,30 @@ router.patch("/mypage/:user_id", async (req, res) => {
     }
 })
 
+// 비밀번호 비교
+router.post('/recreating-pw', async (req, res) => {
+    const { firstName, lastName, email } = req.body;
+    try {
+        const user = await User.findOne({
+            where: {
+                firstName: firstName,
+                lastName: lastName,
+                email: email
+            }
+        })
+
+        if(user) {
+            return res.status(200).json({
+                "message": "존재하는 유저 정보입니다.",
+                user
+            })
+        } else {
+            return res.status(404).json({ "message": "존재하지 않는 유저 정보입니다." })
+        }
+    } catch(err) {
+        console.error(err)
+        return res.status(500).json({ "message": "존재하지 않는 유저 정보입니다." })
+    }
+})
+
 module.exports = router; 
