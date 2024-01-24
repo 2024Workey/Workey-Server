@@ -30,6 +30,7 @@ router.get('/', async (req, res) => {
   }
 })
 
+
 // 회사 하나 반환 (ranking)
 router.get('/:company_id', async (req, res) => {
   try {
