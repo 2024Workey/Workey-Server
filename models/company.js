@@ -16,6 +16,10 @@ const Company = (sequelize) => sequelize.define('companies', {
     },
     image: {
         type: DataTypes.STRING(500),
+    },
+    total_good_state_count: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
     }
 });
 

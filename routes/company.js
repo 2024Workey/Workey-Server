@@ -19,50 +19,31 @@ router.post('/', async (req,res) => {
 // 회사 list (ranking)
 router.get('/', async (req, res) => {
   try {
-    const companies = await Company.findAll();
+    const companies = await Company.findAll({
+      order: [
+        ['total_good_state_count', 'DESC']
+      ]
+    });
     return res.status(200).json(companies);
   } catch(err) {
     return res.status(501).json({ "message": "회사 불러오기에 실패하였습니다." });
   }
 })
 
-// 회사 이름 가져오기 
-router.get('/:companyId', async (req, res) => {
+
+// 회사 하나 반환 (ranking)
+router.get('/:company_id', async (req, res) => {
   try {
     const company = await Company.findOne({
       where: {
-        id: req.params.companyId
+        id : req.params.company_id
       }
     });
-    return res.status(200).json(company);
-  } catch(err) {
-    return res.status(501).json({ "message": "회사 불러오기에 실패하였습니다." });
-  }
-})
-
-// 회사 좋은 표정 개수 (ranking)
-router.get('/:company_id', async (req, res) => {
-  let total = 0;
-  try {
-    const user = await User.findAll({
-      where: {
-        company : req.params.company_id
-      }
-    });
-    // console.log(user);
-
-    // company의 사람들 좋은 표정 개수 구하기
-    for(let x of user) {
-      total += x.dataValues.goodStateCount;
-    }
     
-    return res.status(201).json( { 
-      "company_id": req.params.company_id,
-	    "total_good_state_count": total
-    } )
+    return res.status(201).json(company)
   } catch(err) {
     console.error(err);
-    return res.status(500).json( { "message" : "좋은 표정 개수 불러오기에 실패하였습니다." })
+    return res.status(500).json( { "message" : "회사 조회에 실패하였습니다." })
   }
 })
 
