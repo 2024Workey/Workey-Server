@@ -19,7 +19,11 @@ router.post('/', async (req,res) => {
 // 회사 list (ranking)
 router.get('/', async (req, res) => {
   try {
-    const companies = await Company.findAll();
+    const companies = await Company.findAll({
+      order: [
+        ['total_good_state_count', 'DESC']
+      ]
+    });
     return res.status(200).json(companies);
   } catch(err) {
     return res.status(501).json({ "message": "회사 불러오기에 실패하였습니다." });
