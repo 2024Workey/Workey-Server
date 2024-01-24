@@ -26,6 +26,20 @@ router.get('/', async (req, res) => {
   }
 })
 
+// 회사 이름 가져오기 
+router.get('/:companyId', async (req, res) => {
+  try {
+    const company = await Company.findOne({
+      where: {
+        id: req.params.companyId
+      }
+    });
+    return res.status(200).json(company);
+  } catch(err) {
+    return res.status(501).json({ "message": "회사 불러오기에 실패하였습니다." });
+  }
+})
+
 // 회사 좋은 표정 개수 (ranking)
 router.get('/:company_id', async (req, res) => {
   let total = 0;
