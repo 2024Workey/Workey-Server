@@ -50,17 +50,9 @@ router.get('/:company_id', async (req, res) => {
 
 // update
 router.patch('/:company_id', async (req, res) => {
-  const incrementValue = 1;
   const id = req.params.company_id;
 
   try {
-    const originGoodCount = await Company.findOne({
-      attributes: ['total_good_state_count'],
-      where: {
-        id: id,
-      }
-    });
-
     const company = await Company.update({
       total_good_state_count: Sequelize.literal(`total_good_state_count + 1`),
     }, {
