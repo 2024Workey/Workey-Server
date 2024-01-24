@@ -39,11 +39,11 @@ router.get('/:diary_id', async (req, res) => {
 })
 
 // 글 list 불러오기
-router.get('/list/:user_id', async (req, res) => {
+router.get('/list/:userId', async (req, res) => {
   try {
     const diaries = await Diary.findAll({
       where: {
-        userId : req.params.user_id
+        userId : req.params.userId
       }
     })
 

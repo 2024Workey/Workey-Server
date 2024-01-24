@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
 const multer = require('multer');
-// const sequelize = require("./config/config");
+const sequelize = require("./config/config");
 
 const path = require('path');
 const bodyParse = require('body-parser')
@@ -27,6 +27,14 @@ app.get('/', (req, res) => {
   return res.send("Workey!");
 })
 
+sequelize.sync()
+  .then(() => {
+    console.log('Database synced')
+  })
+  .catch((err) => {
+    console.error('Error syncing database:', err)
+  });
+
 // 미들웨어, session
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,7 +42,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(require('cookie-parser')());
 app.use(bodyParse.json())
-app.use(bodyParse.urlencoded({ extended: true}))
+app.use(bodyParse.urlencoded({ extended: true }))
 app.use(session({
   secret: 'secret-key',
   resave: false,
