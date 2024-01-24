@@ -87,13 +87,13 @@ router.get('/mypage/:user_id', async (req, res) => {
     const id = req.params.user_id;
     try {
         const mypage = await User.findOne({
-            attributes: ['id', 'lastName', 'firstName', 'startTime', 'endTime', 'company'],
+            attributes: ['id', 'lastName', 'firstName', 'startTime', 'endTime', 'company', 'payday'],
             where: { id: id },
         });
         // mypage 정보를 가져왔다면 
         if (mypage)
             return res.status(200).json({
-                "success": mypage,
+                ...mypage,
                 "userId": id
             });
         else
@@ -110,13 +110,19 @@ router.get('/mypage/:user_id', async (req, res) => {
 // 마이페이지 수정
 router.patch("/mypage/:user_id", async (req, res) => {
     const id = req.params.user_id;
-    const { startTime, endTime, company } = req.body;
+
+    const { startTime, endTime, company, payday } = req.body;
     try {
+        const todayYear = new Date().getFullYear();
+        const todayMonth = new Date().getMonth()+ 1; // 월은 0부터 시작하므로 1을 더합니다.
+        const formattedMonth = todayMonth < 10 ? '0' + todayMonth : todayMonth.toString();
+
         // 마이페이지 수정 
         const mypage = await User.update({
             startTime: startTime,
             endTime: endTime,
             company: company,
+            payday: `${todayYear}-${formattedMonth}-${payday}`,
             updatedAt: now,
         }, {
             where: { id: id },
