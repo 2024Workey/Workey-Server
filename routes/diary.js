@@ -13,7 +13,7 @@ router.post('/:user_id/:ques_id', async (req, res) => {
     });
     // diary가 있다면 - 예외처리
     if(diary) {
-      return res.status(201).json( {"message" : "글 저장에 성공했습니다."} )
+      return res.status(201).json( {data: diary} )
     } else {
       return res.status(404).json( {"message" : "글 저장에 실패하였습니다."} )
     }

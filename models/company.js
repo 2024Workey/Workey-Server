@@ -19,7 +19,6 @@ const Company = (sequelize) => sequelize.define('companies', {
     },
     total_good_state_count: {
         type: DataTypes.BIGINT,
-        allowNull: false,
     }
 });
 
