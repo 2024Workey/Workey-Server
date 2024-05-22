@@ -1,4 +1,5 @@
 const express = require('express');
+const sequelize = require('sequelize')
 const { Diary } = require('../models');// index는 파일 이름 생략 가능 
 
 const router = express.Router();
@@ -32,6 +33,29 @@ router.get('/:diary_id', async (req, res) => {
       }
     })
     return res.status(200).json( diaries.dataValues )
+  } catch(err) {
+    console.error(err)
+    return res.status(500).json( { "message": "글 단독 불러오기에 실패하였습니다." } );
+  }
+})
+
+// 글 단독 날짜로 불러오기
+router.get('/date/detail', async (req, res) => {
+  try {
+    const dateParam = req.query.date; // 쿼리 파라미터로부터 날짜 값을 가져옴
+    const diary = await Diary.findOne({
+      where: sequelize.where(
+        sequelize.fn('DATE', sequelize.col('createdAt')),
+        '=',
+        sequelize.fn('DATE', dateParam)
+      )
+    });
+    if(diary) {
+      return res.status(200).json( diary.dataValues )
+    } else {
+      res.status(404).json( { "message": "존재하지 않는 글입니다." } );
+    }
+
   } catch(err) {
     console.error(err)
     return res.status(500).json( { "message": "글 단독 불러오기에 실패하였습니다." } );

@@ -63,16 +63,16 @@ router.post('/', async (req, res) => {
 
 router.get('/:quesId', async (req, res) => {
     try {
-      const question = await Question.findOne({
-        where: {
-          id : req.params.quesId 
-        }
-      })
-      return res.status(200).json( question.dataValues.question )
-    } catch(err) {
-      console.error(err)
-      return res.status(500).json( { "message": "글 단독 불러오기에 실패하였습니다." } );
+        const question = await Question.findOne({
+            where: {
+                id: req.params.quesId
+            }
+        })
+        return res.status(200).json(question.dataValues.question)
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({ "message": "글 단독 불러오기에 실패하였습니다." });
     }
-  })
+})
 
 module.exports = router;
