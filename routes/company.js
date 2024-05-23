@@ -46,5 +46,36 @@ router.get('/:company_id', async (req, res) => {
   }
 })
 
+router.patch('/:company_id', async (req, res) => {
+  const company_id = req.params.company_id
+  try {
+    const company = await Company.findOne({
+      where : {
+        id : company_id
+      }
+    })
+
+    const updateCount = company.total_good_state_count + 1
+
+    await Company.update({
+      total_good_state_count : updateCount
+    },{
+      where : {
+        id : company_id
+      }
+    })
+
+    const updatedCompany = await Company.findOne({
+      where : {
+        id : company_id
+      }
+    })
+
+    return res.status(200).json(updatedCompany)
+  } catch (error) {
+    return res.status(500).json( { "message" : "회사별 긍정적 워라밸 지표 수정에 실패하였습니다." })
+  }
+})
+
 
 module.exports = router;
