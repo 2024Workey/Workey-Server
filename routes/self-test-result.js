@@ -11,6 +11,7 @@ router.post('/:diary_id', async (req, res) => {
       ...req.body
     });
     return res.status(201).json({
+      "id" : selfTestResult.id,
       "diaryId" : req.params.diary_id,
       "message" : "셀프 체크 테스트 결과 저장에 성공했습니다."
     })
@@ -29,6 +30,7 @@ router.get('/:diary_id', async (req, res) => {
       }
     });
     return res.status(201).json( {
+      "id" : selfTestResult.id,
       "diaryId" : selfTestResult.diaryId,
       "st_answer1" : selfTestResult.st_answer1,
       "st_answer2" : selfTestResult.st_answer2,
