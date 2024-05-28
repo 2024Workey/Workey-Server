@@ -46,6 +46,22 @@ router.get('/:company_id', async (req, res) => {
   }
 })
 
+// 회사 이름으로 하나 반환
+router.get('/name/:company_name', async (req, res) => {
+  try {
+    const company = await Company.findOne({
+      where: {
+        name : req.params.company_name
+      }
+    });
+    
+    return res.status(201).json(company)
+  } catch(err) {
+    console.error(err);
+    return res.status(500).json( { "message" : "회사 조회에 실패하였습니다." })
+  }
+})
+
 router.patch('/:company_id', async (req, res) => {
   const company_id = req.params.company_id
   try {
