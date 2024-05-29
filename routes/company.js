@@ -78,8 +78,9 @@ router.get('/name/:company_name', async (req, res) => {
         name : req.params.company_name
       }
     });
-    
-    return res.status(201).json(company)
+    // console.log(req.params.company_name)
+    // console.log(company.dataValues)
+    return res.status(201).json(company.dataValues)
   } catch(err) {
     console.error(err);
     return res.status(500).json( { "message" : "회사 조회에 실패하였습니다." })
