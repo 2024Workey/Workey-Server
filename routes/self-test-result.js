@@ -10,11 +10,7 @@ router.post('/:diary_id', async (req, res) => {
       diaryId : req.params.diary_id,
       ...req.body
     });
-    return res.status(201).json({
-      "id" : selfTestResult.id,
-      "diaryId" : req.params.diary_id,
-      "message" : "셀프 체크 테스트 결과 저장에 성공했습니다."
-    })
+    return res.status(201).json(selfTestResult.dataValues);
   } catch(err) {
     console.error(err)
     return res.status(500).json( { "message" : "셀프 체크 테스트 결과 저장에 실패했습니다." } )
@@ -29,17 +25,10 @@ router.get('/:diary_id', async (req, res) => {
         diaryId : req.params.diary_id
       }
     });
-    return res.status(201).json( {
-      "id" : selfTestResult.id,
-      "diaryId" : selfTestResult.diaryId,
-      "st_answer1" : selfTestResult.st_answer1,
-      "st_answer2" : selfTestResult.st_answer2,
-      "st_answer3" : selfTestResult.st_answer3,
-      "st_answer4" : selfTestResult.st_answer4
-    });
+    return res.status(200).json( selfTestResult.dataValues );
   } catch(err) {
     console.error(err)
-    return res.status(500).json( { "message" : "셀프 체크 테스트 결과 저장에 실패했습니다." } )
+    return res.status(500).json( { "message" : "셀프 체크 테스트 결과 불러오기에 실패했습니다." } )
   }
 })
 

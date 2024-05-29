@@ -25,11 +25,12 @@ router.post('/:user_id/:ques_id', async (req, res) => {
 })
 
 // 글 단독 불러오기
-router.get('/:diary_id', async (req, res) => {
+router.get('/:user_id/:diary_id', async (req, res) => {
   try {
     const diaries = await Diary.findOne({
       where: {
-        id : req.params.diary_id  
+        id : req.params.diary_id,
+        userId: req.params.user_id
       }
     })
     return res.status(200).json( diaries.dataValues )
@@ -63,7 +64,7 @@ router.get('/date/detail', async (req, res) => {
 })
 
 // 글 list 불러오기
-router.get('/list/:userId', async (req, res) => {
+router.get('/:userId', async (req, res) => {
   try {
     const diaries = await Diary.findAll({
       where: {
@@ -84,7 +85,7 @@ router.get('/list/:userId', async (req, res) => {
 })
 
 // 글 수정하기
-router.patch('/:diary_id', async (req, res) => {
+router.patch('/:user_id/:diary_id', async (req, res) => {
   const { answer } = req.body
   const id = req.params.diary_id
 
@@ -92,12 +93,18 @@ router.patch('/:diary_id', async (req, res) => {
     const diary = await Diary.update({
       answer : answer
     }, {
-      where : { id : id }
+      where : { 
+        id : id,
+        userId: req.params.user_id
+      }
     }
     )
 
     const editedDiary = await Diary.findOne({
-      where : { id : id }
+      where : { 
+        id : id,
+        userId: req.params.user_id
+       }
     }
     )
 
