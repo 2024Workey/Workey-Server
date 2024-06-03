@@ -45,7 +45,7 @@ const User = (sequelize) => sequelize.define('users', {
     type: DataTypes.INTEGER,
   },
   payday: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.DATE,
     allowNull: false,
   },
 }
