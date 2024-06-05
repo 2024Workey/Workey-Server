@@ -122,7 +122,7 @@ router.patch("/mypage/:user_id", async (req, res) => {
             startTime: startTime,
             endTime: endTime,
             company: company,
-            payday: `${todayYear}-${formattedMonth}-${payday}`,
+            payday: payday,
             updatedAt: now,
         }, {
             where: { id: id },
