@@ -9,7 +9,7 @@ const bodyParse = require('body-parser')
 const passport = require('passport');
 
 const app = express();
-const port = 3000;
+const port = 80;
 
 // 세션
 const SEC = 1000;

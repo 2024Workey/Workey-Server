@@ -86,12 +86,16 @@ router.get('/:userId', async (req, res) => {
 
 // 글 수정하기
 router.patch('/:user_id/:diary_id', async (req, res) => {
-  const { answer } = req.body
+  const { answer, star, score, state, companyId } = req.body
   const id = req.params.diary_id
 
   try {
     const diary = await Diary.update({
-      answer : answer
+      answer : answer,
+      star: star,
+      score: score,
+      state: state,
+      companyId: companyId,
     }, {
       where : { 
         id : id,
