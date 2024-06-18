@@ -6,7 +6,9 @@ const sequelize = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_US
     host: process.env.MYSQL_HOST,
     port: process.env.MYSQL_PORT,
     dialect: 'mysql',
-    timezone: "Asia/Seoul", //이 부분을 추가함.
+    timezone: '+09:00',
+    seederStorage: 'sequelize',
+    operatorsAliases: false
 })
 
 // 연결 테스트
