@@ -33,7 +33,7 @@ router.get('/:diary_id', async (req, res) => {
 })
 
 // self test result 수정하기
-router.patch('/:diary_id', async (req, res) => {
+router.post('/:diary_id', async (req, res) => {
   const { st_answer1, st_answer2, st_answer3, st_answer4 } = req.body
 
   try {
