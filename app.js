@@ -38,10 +38,14 @@ sequelize.sync()
 // 미들웨어, session
 // CORS 설정
 const corsOptions = {
-  origin: '*', // 허용할 출처를 명시합니다.
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // 허용할 메서드를 명시합니다.
+  origin: ['http://127.0.0.1:5500', 'https://workey-2024.web.app'], // 허용할 출처를 명시합니다.
+  methods: ['GET', 'POST', 'DELETE', 'PATCH', 'OPTIONS'], // 허용할 메서드를 명시합니다.
   allowedHeaders: ['Content-Type', 'Authorization'], // 허용할 헤더를 명시합니다.
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 };
+
+app.use(cors(corsOptions));
 
 app.use(cors(corsOptions));
 
