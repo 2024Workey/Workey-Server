@@ -1,5 +1,5 @@
 const express = require('express');
-const { Company, User } = require('../models');// index는 파일 이름 생략 가능 
+const { Company, User } = require('../models');
 const Sequelize = require('sequelize');
 
 const router = express.Router();
@@ -31,7 +31,6 @@ router.get('/', async (req, res) => {
   }
 })
 
-
 // 회사 하나 반환 (ranking)
 router.get('/:company_id', async (req, res) => {
   try {
@@ -49,24 +48,30 @@ router.get('/:company_id', async (req, res) => {
 })
 
 // update
-router.post('/:company_id', async (req, res) => {
+router.put('/:company_id', async (req, res) => {
   const id = req.params.company_id;
 
+  const { name, image, total_good_state_count } = req.body;
+
   try {
-    const company = await Company.update({
-      total_good_state_count: Sequelize.literal(`total_good_state_count + 1`),
+    const [updated] = await Company.update({
+      name,
+      image,
+      total_good_state_count,
+      updatedAt: new Date(),
     }, {
       where: { id: id }
-    })
+    });
 
-    if (company) {
-      return res.status(201).json( company )
+    if (updated) {
+      const updatedCompany = await Company.findOne({ where: { id: id } });
+      return res.status(200).json(updatedCompany);
     } else {
-      return res.status(400).json({ "message": "좋은 표정 저장에 실패" })
+      return res.status(400).json({ "message": "좋은 표정 저장에 실패" });
     }
   } catch (err) {
-    console.error(err)
-    return res.status(500).json({ "message": "좋은 표정 저장에 실패하였습니다." })
+    console.error(err);
+    return res.status(500).json({ "message": "좋은 표정 저장에 실패하였습니다." });
   }
 })
 
@@ -78,45 +83,11 @@ router.get('/name/:company_name', async (req, res) => {
         name : req.params.company_name
       }
     });
-    // console.log(req.params.company_name)
-    // console.log(company.dataValues)
-    return res.status(201).json(company.dataValues)
+    return res.status(201).json(company.dataValues);
   } catch(err) {
     console.error(err);
-    return res.status(500).json( { "message" : "회사 조회에 실패하였습니다." })
+    return res.status(500).json({ "message" : "회사 조회에 실패하였습니다." });
   }
 })
-
-router.post('/:company_id', async (req, res) => {
-  const company_id = req.params.company_id
-  try {
-    const company = await Company.findOne({
-      where : {
-        id : company_id
-      }
-    })
-
-    const updateCount = company.total_good_state_count + 1
-
-    await Company.update({
-      total_good_state_count : updateCount
-    },{
-      where : {
-        id : company_id
-      }
-    })
-
-    const updatedCompany = await Company.findOne({
-      where : {
-        id : company_id
-      }
-    })
-
-    return res.status(200).json(updatedCompany)
-  } catch (error) {
-    return res.status(500).json( { "message" : "회사별 긍정적 워라밸 지표 수정에 실패하였습니다." })
-  }
-})
-
 
 module.exports = router;
