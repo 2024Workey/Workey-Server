@@ -108,7 +108,7 @@ router.get('/mypage/:user_id', async (req, res) => {
 })
 
 // 마이페이지 수정
-router.patch("/mypage/:user_id", async (req, res) => {
+router.post("/mypage/:user_id", async (req, res) => {
     const id = req.params.user_id;
 
     const { startTime, endTime, company, payday } = req.body;
@@ -171,7 +171,7 @@ router.post('/recreating-pw', async (req, res) => {
 })
 
 // 새비밀번호 설정
-router.patch('/recreating-pw/:user_id', async (req, res) => {
+router.post('/recreating-pw/:user_id', async (req, res) => {
     const { password } = req.body
     const id = req.params.user_id
 

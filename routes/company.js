@@ -49,7 +49,7 @@ router.get('/:company_id', async (req, res) => {
 })
 
 // update
-router.patch('/:company_id', async (req, res) => {
+router.post('/:company_id', async (req, res) => {
   const id = req.params.company_id;
 
   try {
@@ -87,7 +87,7 @@ router.get('/name/:company_name', async (req, res) => {
   }
 })
 
-router.patch('/:company_id', async (req, res) => {
+router.post('/:company_id', async (req, res) => {
   const company_id = req.params.company_id
   try {
     const company = await Company.findOne({
