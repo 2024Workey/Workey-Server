@@ -1,6 +1,6 @@
 const express = require('express');
-const sequelize = require('sequelize')
-const { Diary } = require('../models');// index는 파일 이름 생략 가능 
+const sequelize = require('sequelize');
+const { Diary } = require('../models');
 
 const router = express.Router();
 
@@ -12,15 +12,14 @@ router.post('/:user_id/:ques_id', async (req, res) => {
       quesId : req.params.ques_id,
       ...req.body
     });
-    // diary가 있다면 - 예외처리
     if(diary) {
-      return res.status(201).json( {data: diary} )
+      return res.status(201).json({ data: diary });
     } else {
-      return res.status(404).json( {"message" : "글 저장에 실패하였습니다."} )
+      return res.status(404).json({ "message" : "글 저장에 실패하였습니다." });
     }
   } catch(err) {
-    console.error(err)
-    return res.status(500).json( { "message": "글 저장에 실패하였습니다." } );
+    console.error(err);
+    return res.status(500).json({ "message": "글 저장에 실패하였습니다." });
   }
 })
 
@@ -32,18 +31,18 @@ router.get('/:user_id/:diary_id', async (req, res) => {
         id : req.params.diary_id,
         userId: req.params.user_id
       }
-    })
-    return res.status(200).json( diaries.dataValues )
+    });
+    return res.status(200).json(diaries.dataValues);
   } catch(err) {
-    console.error(err)
-    return res.status(500).json( { "message": "글 단독 불러오기에 실패하였습니다." } );
+    console.error(err);
+    return res.status(500).json({ "message": "글 단독 불러오기에 실패하였습니다." });
   }
 })
 
 // 글 단독 날짜로 불러오기
 router.get('/date/detail', async (req, res) => {
   try {
-    const dateParam = req.query.date; // 쿼리 파라미터로부터 날짜 값을 가져옴
+    const dateParam = req.query.date;
     const diary = await Diary.findOne({
       where: sequelize.where(
         sequelize.fn('DATE', sequelize.col('createdAt')),
@@ -52,14 +51,14 @@ router.get('/date/detail', async (req, res) => {
       )
     });
     if(diary) {
-      return res.status(200).json( diary.dataValues )
+      return res.status(200).json(diary.dataValues);
     } else {
-      res.status(404).json( { "message": "존재하지 않는 글입니다." } );
+      res.status(404).json({ "message": "존재하지 않는 글입니다." });
     }
 
   } catch(err) {
-    console.error(err)
-    return res.status(500).json( { "message": "글 단독 불러오기에 실패하였습니다." } );
+    console.error(err);
+    return res.status(500).json({ "message": "글 단독 불러오기에 실패하였습니다." });
   }
 })
 
@@ -70,64 +69,55 @@ router.get('/:userId', async (req, res) => {
       where: {
         userId : req.params.userId
       }
-    })
+    });
 
     let values = [];
     for(let x of diaries) {
-      values.push(x.dataValues)
+      values.push(x.dataValues);
     }
 
-    return res.status(200).json( values )
+    return res.status(200).json(values);
   } catch(err) {
-    console.error(err)
-    return res.status(500).json( { "message": "글 list 불러오기에 실패하였습니다." } );
+    console.error(err);
+    return res.status(500).json({ "message": "글 list 불러오기에 실패하였습니다." });
   }
 })
 
 // 글 수정하기
-router.post('/:user_id/:diary_id', async (req, res) => {
-  const { answer, star, score, state, companyId } = req.body
-  const id = req.params.diary_id
+router.put('/:user_id/:diary_id', async (req, res) => {
+  const { answer, star, score, state, companyId } = req.body;
+  const id = req.params.diary_id;
 
   try {
-    const diary = await Diary.update({
-      answer : answer,
-      star: star,
-      score: score,
-      state: state,
-      companyId: companyId,
+    const [updated] = await Diary.update({
+      answer,
+      star,
+      score,
+      state,
+      companyId,
+      updatedAt: new Date(),
     }, {
-      where : { 
-        id : id,
+      where: { 
+        id: id,
         userId: req.params.user_id
       }
-    }
-    )
+    });
 
-    const editedDiary = await Diary.findOne({
-      where : { 
-        id : id,
-        userId: req.params.user_id
-       }
-    }
-    )
-
-    console.log("***", editedDiary)
-
-    // diary가 업데이트가 안됐을 경우
-    if(diary) {
-      res.status(201).json({ "answer" : editedDiary.dataValues.answer })
+    if(updated) {
+      const editedDiary = await Diary.findOne({
+        where: { 
+          id: id,
+          userId: req.params.user_id
+        }
+      });
+      return res.status(200).json(editedDiary);
     } else {
-      return res.status(404).json( { "message": "글 수정하기에 실패하였습니다." } )
+      return res.status(404).json({ "message": "글 수정하기에 실패하였습니다." });
     }
-  }
-  
-  // 서버에 문제 생겼을때
-  catch(err) {
-    console.error(err)
-    return res.status(500).json( { "message": "글 수정하기에 실패하였습니다." } );
+  } catch(err) {
+    console.error(err);
+    return res.status(500).json({ "message": "글 수정하기에 실패하였습니다." });
   }
 })
-
 
 module.exports = router;
